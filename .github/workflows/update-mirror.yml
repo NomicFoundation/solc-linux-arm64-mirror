@@ -1,0 +1,41 @@
+name: Update mirror
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  createPullRequest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          path: mirror
+      - uses: actions/checkout@v5
+        with:
+          path: original
+          repository: nikitastupin/solc
+      - name: Update mirror
+        run: cp -R original/linux mirror/linux
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@2b011faafdcbc9ceb11414d64d0573f37c774b04
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Update mirror
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
+          branch: update-mirror
+          delete-branch: true
+          title: "Update mirror"
+          body: |
+            The mirror has been updated
+          assignees: alcuadrado
+          draft: false
