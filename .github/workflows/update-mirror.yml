@@ -22,7 +22,7 @@ jobs:
           path: original
           repository: nikitastupin/solc
       - name: Update mirror
-        run: cp -R original/linux mirror/linux
+        run: cp -R original/linux/ mirror/public/
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@2b011faafdcbc9ceb11414d64d0573f37c774b04
